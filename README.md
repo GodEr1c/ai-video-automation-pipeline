@@ -22,7 +22,7 @@ Un pipeline automatizado *end-to-end* construido en Python que ingesta video com
 * **Distribución:** Meta Graph API, YouTube Data API, Telegram Bot API.
 
   ```mermaid
-graph TD
+  graph TD
     %% Nodos iniciales
     A[📁 Carpeta de Entrada<br>Videos Crudos .MOV] -->|Watchdog / Cron| B(Script 1: Core de Edición)
     
