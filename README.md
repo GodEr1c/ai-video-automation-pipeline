@@ -6,7 +6,7 @@
 Un pipeline automatizado *end-to-end* construido en Python que ingesta video comercial crudo, utiliza Inteligencia Artificial para estructurar la retención visual, renderiza overlays dinámicos y distribuye el resultado final en 4 plataformas sociales de forma autónoma. Diseñado para escalar la producción de contenido de comercio electrónico eliminando el cuello de botella de la edición manual.
 
 ## ⚡ El Problema vs. La Solución
-**El Cuello de Botella:** La edición manual de Shorts/Reels comerciales y su publicación multiplataforma consumía aproximadamente [X] horas semanales. El proceso requería recortar silencios, animar subtítulos, agregar elementos de retención visual y gestionar subidas propensas a errores.
+**El Cuello de Botella:** La edición manual de Shorts/Reels comerciales y su publicación multiplataforma consumía aproximadamente 7.5 horas semanales. El proceso requería recortar silencios, animar subtítulos, agregar elementos de retención visual y gestionar subidas propensas a errores.
 
 **La Solución:** Un orquestador local que:
 1. **Limpia el audio/video:** Detecta y recorta silencios automáticamente.
@@ -49,7 +49,7 @@ Un pipeline automatizado *end-to-end* construido en Python que ingesta video com
 
     %% Notificación
     J -->|Webhook / API| N[📱 Telegram Bot<br>Alerta de Éxito y Links]
-      ```
+  ```
       
 
 ## 📈 Impacto y ROI Operativo
