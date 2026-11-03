@@ -57,3 +57,49 @@ Un pipeline automatizado *end-to-end* construido en Python que ingesta video com
 * **Escalabilidad:** Permite procesar y distribuir un promedio de 60-90 Shorts mensuales ahorrando más de **30 horas netas de trabajo operativo al mes**.
 * **Mejora Cualitativa:** La edición automatizada superó la complejidad de la edición manual anterior (que se limitaba a cortes de silencio), inyectando ahora componentes de alta retención (UI mockups, Pixel-Art y animaciones) con costo de tiempo cero.
 * **Distribución Garantizada:** Sistema idempotente que asegura la presencia de la marca simultáneamente en YouTube, Facebook e Instagram sin intervención humana tras depositar el crudo.
+
+## 🎥 Demostración Visual
+*
+https://github.com/user-attachments/assets/db23d087-cd06-4eb1-b15c-d768f0eadde3
+
+
+## 💻 Muestra de Arquitectura (Snippets)
+
+Para proteger la propiedad intelectual, el código fuente es privado. Sin embargo, aquí hay dos fragmentos estructurales que demuestran la arquitectura del sistema:
+
+**1. Tipado Estricto para Ingesta de Datos (Data Validation)**
+Uso de `dataclasses` (o Pydantic) para mapear la respuesta del LLM antes de enviarla al motor de renderizado web, garantizando que los tiempos y assets sean exactos:
+
+```python
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class VisualCue:
+    timestamp_start: float
+    duration: float
+    cue_type: str  # Ej: 'pixel_art_pop', 'ui_mockup_card'
+    asset_slug: str
+    primary_text: Optional[str] = None
+    
+    def is_valid_for_render(self) -> bool:
+        return self.duration > 0 and self.asset_slug is not None
+```
+
+**2. Lógica de Idempotencia (Prevención de Subidas Duplicadas)**
+El sistema de distribución consulta la base de datos local SQLite antes de iniciar peticiones costosas a las APIs, evitando bloqueos por spam o duplicidad en caso de caídas de red:
+
+```Python
+def distribute_to_platforms(video_data: dict, db_session) -> dict:
+    video_id = video_data['stem']
+    
+    if db_session.is_published(video_id, platform="instagram"):
+        logger.info(f"⏭️ Omitiendo IG para {video_id}: Ya publicado previamente.")
+    else:
+        # Lógica de subida vía Graph API
+        response = meta_service.publish_reel(video_data)
+        if response.status == 'success':
+            db_session.mark_as_published(video_id, platform="instagram", permalink=response.url)
+            
+    return db_session.get_status(video_id)
+```
